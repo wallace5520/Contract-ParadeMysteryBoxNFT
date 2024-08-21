@@ -56,6 +56,12 @@ contract MintCellulaNFT is
 
     function mintBatch(uint256 numbers) external {
         require(numbers > 0, "The Claim numbers must more than 0 ");
+
+        uint256 _maxClaimed = maxClaimed(msg.sender);
+        uint256 _alreadyClaimed = alreadyClaimed(msg.sender);
+        require((_maxClaimed - _alreadyClaimed) >= numbers , "Invalid number");
+
+
         for (uint256 i = 0; i < numbers; ) {
             mint();
             unchecked {
