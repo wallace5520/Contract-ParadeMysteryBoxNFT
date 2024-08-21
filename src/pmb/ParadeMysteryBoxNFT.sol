@@ -13,7 +13,6 @@ contract ParadeMysteryBoxNFT is
     OwnableUpgradeable,
     UUPSUpgradeable
 {
-    using Strings for uint256;
     uint256 private _nextTokenId;
 
     mapping(address => uint256) public allClaimedAmounts;
@@ -22,9 +21,6 @@ contract ParadeMysteryBoxNFT is
     address public metadataRenderer;
 
     uint256 public constant MAX_AMOUNTS = 12000;
-
-    event AddWhitelist(address[] _addresses);
-    event MintBatch(address indexed to, uint256 numbers);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -39,9 +35,7 @@ contract ParadeMysteryBoxNFT is
 
     function mint(address minter) internal {
         uint256 mintIndex = ++_nextTokenId;
-        if (mintIndex <= MAX_AMOUNTS) {
-            _mint(minter, mintIndex);
-        }
+        _mint(minter, mintIndex);
 
         alreadyClaimedAmounts[minter]++;
     }
@@ -71,15 +65,10 @@ contract ParadeMysteryBoxNFT is
 
     function addWhitelist(address[] calldata _addresses) external onlyOwner {
         require(_addresses.length > 0, "The address amounts must more than 0 ");
-        require(
-            _addresses.length < MAX_AMOUNTS,
-            "The address amounts more than MAX_NUMBERS "
-        );
 
         for (uint i = 0; i < _addresses.length; i++) {
             allClaimedAmounts[_addresses[i]]++;
         }
-        emit AddWhitelist(_addresses);
     }
 
     function maxClaimed(address owner) public view returns (uint256) {
