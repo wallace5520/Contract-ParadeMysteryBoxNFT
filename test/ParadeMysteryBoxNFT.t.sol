@@ -49,31 +49,31 @@ contract TestParadeMysteryBoxNFT is Test {
         vm.startPrank(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9);
         console.log("----- all -----");
         assertEq(
-            instance.maxClaimed(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
+            instance.allClaimedAmounts(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
             3
         );
         assertEq(
-            instance.alreadyClaimed(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
+            instance.alreadyClaimedAmounts(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
             0
         );
         instance.mintBatch(1);
         console.log("----- mintBatch 1 -----");
         assertEq(
-            instance.maxClaimed(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
+            instance.allClaimedAmounts(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
             3
         );
         assertEq(
-            instance.alreadyClaimed(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
+            instance.alreadyClaimedAmounts(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
             1
         );
         instance.mintBatch(2);
         console.log("----- mintBatch 2 all -----");
         assertEq(
-            instance.maxClaimed(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
+            instance.allClaimedAmounts(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
             3
         );
         assertEq(
-            instance.alreadyClaimed(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
+            instance.alreadyClaimedAmounts(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
             3
         );
         vm.stopPrank();
@@ -88,20 +88,20 @@ contract TestParadeMysteryBoxNFT is Test {
         instance.addWhitelist(_addresses);
 
         assertEq(
-            instance.maxClaimed(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
+            instance.allClaimedAmounts(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
             6
         );
         assertEq(
-            instance.alreadyClaimed(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
+            instance.alreadyClaimedAmounts(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
             3
         );
 
         assertEq(
-            instance.maxClaimed(0xC565FC29F6df239Fe3848dB82656F2502286E97d),
+            instance.allClaimedAmounts(0xC565FC29F6df239Fe3848dB82656F2502286E97d),
             2
         );
         assertEq(
-            instance.alreadyClaimed(0xC565FC29F6df239Fe3848dB82656F2502286E97d),
+            instance.alreadyClaimedAmounts(0xC565FC29F6df239Fe3848dB82656F2502286E97d),
             0
         );
         vm.stopPrank();

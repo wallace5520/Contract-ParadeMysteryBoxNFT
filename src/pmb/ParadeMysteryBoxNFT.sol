@@ -48,8 +48,8 @@ contract ParadeMysteryBoxNFT is
         );
 
         address _minter = _msgSender();
-        uint256 _maxClaimed = maxClaimed(_minter);
-        uint256 _alreadyClaimed = alreadyClaimed(_minter);
+        uint256 _maxClaimed = allClaimedAmounts[_minter];
+        uint256 _alreadyClaimed = alreadyClaimedAmounts[_minter];
         require(
             _maxClaimed - _alreadyClaimed >= amounts,
             "Invalid Amounts: Out Of Address Mint Range"
@@ -71,13 +71,7 @@ contract ParadeMysteryBoxNFT is
         }
     }
 
-    function maxClaimed(address owner) public view returns (uint256) {
-        return allClaimedAmounts[owner];
-    }
 
-    function alreadyClaimed(address owner) public view returns (uint256) {
-        return alreadyClaimedAmounts[owner];
-    }
 
     function tokenURI(
         uint256 tokenId
