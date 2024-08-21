@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../metadata/IMetadataRenderer.sol";
 
-contract MintCellulaNFT is
+contract ParadeMysteryBoxNFT is
     Initializable,
     ERC721Upgradeable,
     OwnableUpgradeable,

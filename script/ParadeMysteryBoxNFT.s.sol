@@ -3,10 +3,10 @@ pragma solidity ^0.8.20;
 
 import "forge-std/console.sol";
 import "forge-std/Script.sol";
-import "../src/cellula/MintCellulaNFT.sol";
+import "../src/pmb/ParadeMysteryBoxNFT.sol";
 import {Upgrades} from "openzeppelin-foundry-upgrades/Upgrades.sol";
 
-contract MintCellulaNFTUUPS is Script {
+contract ParadeMysteryBoxNFTUUPS is Script {
 
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
@@ -15,8 +15,8 @@ contract MintCellulaNFTUUPS is Script {
         address owner = vm.envAddress("OWNER");
 
         address uupsProxy = Upgrades.deployUUPSProxy(
-            "MintCellulaNFT.sol",
-            abi.encodeCall(MintCellulaNFT.initialize, owner)
+            "ParadeMysteryBoxNFT.sol",
+            abi.encodeCall(ParadeMysteryBoxNFT.initialize, owner)
         );
 
         console.log("uupsProxy deploy at %s", uupsProxy);

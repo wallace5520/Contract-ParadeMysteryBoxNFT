@@ -36,7 +36,9 @@ contract MetadataRenderer is IMetadataRenderer, Ownable {
     }
 
     function tokenURIJSON(uint256 tokenID) public view returns (string memory) {
-        uint256 mp = getMp(tokenID);
+        uint256 _mp = 0;
+        string memory _mp_level_img;
+        (_mp,_mp_level_img) = getMp(tokenID);
 
         return
             string(
@@ -47,18 +49,14 @@ contract MetadataRenderer is IMetadataRenderer, Ownable {
                     " #",
                     Strings.toString(tokenID),
                     '",',
-
                     '"description": "',
                     description,
                     '",',
-
                     '"MP": "',
-                    Strings.toString(mp),
+                    Strings.toString(_mp),
                     '",',
-
                     '"image": "',
-                    imageURI,
-                    Strings.toString(mp),
+                    string.concat(imageURI, _mp_level_img),
                     ".png",
                     '"}'
                 )
@@ -77,23 +75,28 @@ contract MetadataRenderer is IMetadataRenderer, Ownable {
         description = _description;
     }
 
-    function getMp(uint256 tokenID) internal pure returns (uint256) {
+    function getMp(uint256 tokenID) internal pure returns (uint256,string memory) {
         uint256 _seed;
-        bool _bool;
-        (_bool, _seed) = Math.tryMod(tokenID, 10);
+        (, _seed) = Math.tryMod(tokenID, 10);
         uint256 mp = 0;
+        string memory mp_level_img;
         if (_seed == 1 || _seed == 4 || _seed == 7 || _seed == 9) {
             mp = 150;
+            mp_level_img = "3";
         } else if (_seed == 2 || _seed == 5) {
             mp = 100;
+            mp_level_img = "2";
         } else if (_seed == 3 || _seed == 6) {
             mp = 200;
+            mp_level_img = "4";
         } else if (_seed == 8) {
             mp = 50;
+            mp_level_img = "1";
         } else if (_seed == 0) {
             mp = 250;
+            mp_level_img = "5";
         }
 
-        return mp;
+        return (mp,mp_level_img);
     }
 }

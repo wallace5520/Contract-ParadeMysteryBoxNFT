@@ -2,28 +2,28 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import "../src/cellula/MintCellulaNFT.sol";
+import "../src/pmb/ParadeMysteryBoxNFT.sol";
 import {Upgrades} from "openzeppelin-foundry-upgrades/Upgrades.sol";
 
-contract TestMintCellulaNFT is Test {
+contract TestParadeMysteryBoxNFT is Test {
     address constant SENDER_ADDRESS =
         0x42e8bA50cA28e2B5557F909185ec5ad50f82675e;
     address constant SOME_ADDRESS = 0x21cB920Bf98041CD33A68F7543114a98e420Da0B;
     address constant OWNER_ADDRESS = 0xb84C357F5F6BB7f36632623105F10cFAD3DA18A6;
 
     address private proxy;
-    MintCellulaNFT private instance;
+    ParadeMysteryBoxNFT private instance;
 
     function setUp() public {
         console.log("=======setUp============");
         proxy = Upgrades.deployUUPSProxy(
-            "MintCellulaNFT.sol",
-            abi.encodeCall(MintCellulaNFT.initialize, OWNER_ADDRESS)
+            "ParadeMysteryBoxNFT.sol",
+            abi.encodeCall(ParadeMysteryBoxNFT.initialize, OWNER_ADDRESS)
         );
 
         console.log("uups proxy -> %s", proxy);
 
-        instance = MintCellulaNFT(proxy);
+        instance = ParadeMysteryBoxNFT(proxy);
         assertEq(instance.owner(), OWNER_ADDRESS);
 
         address implAddressV1 = Upgrades.getImplementationAddress(proxy);
