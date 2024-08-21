@@ -16,12 +16,12 @@ contract MintCellulaNFT is
     using Strings for uint256;
     uint256 private _nextTokenId;
 
-    mapping(address => uint256) public allClaimedNumbers;
-    mapping(address => uint256) public alreadyClaimedNumbers;
+    mapping(address => uint256) public allClaimedAmounts;
+    mapping(address => uint256) public alreadyClaimedAmounts;
 
     address public metadataRenderer;
 
-    uint256 public constant MAX_NUMBERS = 12000;
+    uint256 public constant MAX_AMOUNTS = 12000;
 
     event AddWhitelist(address[] _addresses);
     event MintBatch(address indexed to, uint256 numbers);
@@ -32,52 +32,62 @@ contract MintCellulaNFT is
     }
 
     function initialize(address initialOwner) public initializer {
-        __ERC721_init("Mint_Cellula_NFT", "Cellula");
+        __ERC721_init("Parade Mystery Box", "PMB");
         __Ownable_init(initialOwner);
         __UUPSUpgradeable_init();
     }
 
-    function mint() internal {
-        uint256 mintIndex = _nextTokenId++;
-        if (mintIndex <= MAX_NUMBERS) {
-            _safeMint(_msgSender(), mintIndex);
+    function mint(address minter) internal {
+        uint256 mintIndex = ++_nextTokenId;
+        if (mintIndex <= MAX_AMOUNTS) {
+            _mint(minter, mintIndex);
         }
 
-        alreadyClaimedNumbers[_msgSender()]++;
+        alreadyClaimedAmounts[minter]++;
     }
 
-    function mintBatch(uint256 numbers) external {
-        require(numbers > 0, "The Claim numbers must more than 0 ");
-        require((numbers + _nextTokenId) < MAX_NUMBERS, "Invalid Numbers: more than MAX_NUMBERS");
+    function mintBatch(uint256 amounts) external {
+        require(amounts > 0, "Invalid Amounts: Must More Than 0 ");
+        require(
+            amounts + _nextTokenId <= MAX_AMOUNTS,
+            "Invalid Amounts: More Than MAX_NUMBERS"
+        );
 
-        uint256 _maxClaimed = maxClaimed(_msgSender());
-        uint256 _alreadyClaimed = alreadyClaimed(_msgSender());
-        require((_maxClaimed - _alreadyClaimed) >= numbers , "Invalid Numbers");
+        address _minter = _msgSender();
+        uint256 _maxClaimed = maxClaimed(_minter);
+        uint256 _alreadyClaimed = alreadyClaimed(_minter);
+        require(
+            _maxClaimed - _alreadyClaimed >= amounts,
+            "Invalid Amounts: Out Of Address Mint Range"
+        );
 
-
-        for (uint256 i = 0; i < numbers; ) {
-            mint();
+        for (uint256 i = 0; i < amounts; ) {
+            mint(_minter);
             unchecked {
                 ++i;
             }
         }
-        emit MintBatch(_msgSender(), numbers);
     }
 
     function addWhitelist(address[] calldata _addresses) external onlyOwner {
-        require(_addresses.length > 0, "The address numbers must more than 0 ");
-        require(_addresses.length < MAX_NUMBERS, "The address numbers more than MAX_NUMBERS ");
+        require(_addresses.length > 0, "The address amounts must more than 0 ");
+        require(
+            _addresses.length < MAX_AMOUNTS,
+            "The address amounts more than MAX_NUMBERS "
+        );
 
         for (uint i = 0; i < _addresses.length; i++) {
-            allClaimedNumbers[_addresses[i]]++;
+            allClaimedAmounts[_addresses[i]]++;
         }
         emit AddWhitelist(_addresses);
     }
+
     function maxClaimed(address owner) public view returns (uint256) {
-        return allClaimedNumbers[owner];
+        return allClaimedAmounts[owner];
     }
+
     function alreadyClaimed(address owner) public view returns (uint256) {
-        return alreadyClaimedNumbers[owner];
+        return alreadyClaimedAmounts[owner];
     }
 
     function tokenURI(

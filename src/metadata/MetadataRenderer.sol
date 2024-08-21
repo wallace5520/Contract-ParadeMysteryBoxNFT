@@ -47,14 +47,18 @@ contract MetadataRenderer is IMetadataRenderer, Ownable {
                     " #",
                     Strings.toString(tokenID),
                     '",',
+
                     '"description": "',
                     description,
-                    " #MP:",
+                    '",',
+
+                    '"MP": "',
                     Strings.toString(mp),
                     '",',
+
                     '"image": "',
                     imageURI,
-                    mp,
+                    Strings.toString(mp),
                     ".png",
                     '"}'
                 )
