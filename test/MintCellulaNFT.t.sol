@@ -84,6 +84,8 @@ contract TestMintCellulaNFT is Test {
         _addresses2[1] = address(0xC565FC29F6df239Fe3848dB82656F2502286E97d);
         _addresses2[2] = address(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9);
         _addresses2[3] = address(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9);
+        
+        instance.addWhitelist(_addresses);
 
         assertEq(
             instance.maxClaimed(0x3De70dA882f101b4b3d5f3393c7f90e00E64edB9),
