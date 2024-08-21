@@ -38,28 +38,21 @@ contract MintCellulaNFT is
     }
 
     function mint() internal {
-        address minter = msg.sender;
-        uint256 _maxClaimed = maxClaimed(minter);
-        uint256 _alreadyClaimed = alreadyClaimed(minter);
-        require(_maxClaimed > _alreadyClaimed, "No Mintable NFT");
-
         uint256 mintIndex = _nextTokenId++;
-        // _mint(minter, tokenId);
-
-        // uint mintIndex = totalSupply() + 1;
         if (mintIndex <= MAX_NUMBERS) {
-            _safeMint(minter, mintIndex);
+            _safeMint(_msgSender(), mintIndex);
         }
 
-        alreadyClaimedNumbers[minter]++;
+        alreadyClaimedNumbers[_msgSender()]++;
     }
 
     function mintBatch(uint256 numbers) external {
         require(numbers > 0, "The Claim numbers must more than 0 ");
+        require(numbers < MAX_NUMBERS, "Invalid Numbers: more than MAX_NUMBERS");
 
-        uint256 _maxClaimed = maxClaimed(msg.sender);
-        uint256 _alreadyClaimed = alreadyClaimed(msg.sender);
-        require((_maxClaimed - _alreadyClaimed) >= numbers , "Invalid number");
+        uint256 _maxClaimed = maxClaimed(_msgSender());
+        uint256 _alreadyClaimed = alreadyClaimed(_msgSender());
+        require((_maxClaimed - _alreadyClaimed) >= numbers , "Invalid Numbers");
 
 
         for (uint256 i = 0; i < numbers; ) {
@@ -68,10 +61,13 @@ contract MintCellulaNFT is
                 ++i;
             }
         }
-        emit MintBatch(msg.sender, numbers);
+        emit MintBatch(_msgSender(), numbers);
     }
 
     function addWhitelist(address[] calldata _addresses) external onlyOwner {
+        require(_addresses.length > 0, "The address numbers must more than 0 ");
+        require(_addresses.length < MAX_NUMBERS, "The address numbers more than MAX_NUMBERS ");
+
         for (uint i = 0; i < _addresses.length; i++) {
             allClaimedNumbers[_addresses[i]]++;
         }
